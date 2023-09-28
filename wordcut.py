@@ -1,17 +1,18 @@
-import pandas
-import os
+import csv
 
-# 自己数据文件所在吧名
-directory = "汽车吧"
+# 自己数据文件所在目录
+directory = "刀剑神域"
 # 保存内容至文本文件
-f = open('words.txt',mode='a+',encoding='UTF-8')
+fp = open('res/words(less).txt',mode='w',encoding='GB18030')
 
-for file in os.listdir(directory):
-    data = pandas.read_excel(directory+"/"+file,sheet_name="汽车")
-    data.dropna(subset=['大致内容'], inplace=True)
-    # print(data)
+reader = csv.reader(open("刀剑神域\刀剑神域(less).csv", "r", encoding="GB18030", newline=""))
+index = 1
 
-    for item in data['大致内容']:
-        f.write(str(item))
+for row in reader:
+    if index > 1:
+        fp.write(row[3])
+        fp.write('\n')
 
-f.close()
+    index += 1
+
+fp.close()

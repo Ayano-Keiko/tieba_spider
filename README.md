@@ -1,4 +1,4 @@
-# # tieba_spider
+# tieba_spider
 
 百度贴吧爬虫——获取页面信息
 A way to get specific module of Baidu Tieba.

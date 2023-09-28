@@ -5,8 +5,6 @@
 import jieba
 import wordcloud
 import pandas
-from PIL import Image
-import numpy
 import cv2 as cv
 
 
@@ -83,7 +81,7 @@ def draw_pic(txt, mask = ""):
 
 if __name__ == "__main__":
     fileName = "res/words(less).txt"
-    mask = cv.imread("res/mask.jpg", cv.IMREAD_GRAYSCALE)
+    mask = cv.imread("res/mask.jpg", cv.IMREAD_GRAYSCALE)  # openCV 打开速度更快
     fp = open(fileName, "r", encoding="GB18030")
 
     # 进行分词处理

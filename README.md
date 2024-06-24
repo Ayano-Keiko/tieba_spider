@@ -18,7 +18,7 @@ Python 3.X
 > [jieba](https://pypi.org/project/jieba/)<br>
 > [bs4](https://beautiful-soup-4.readthedocs.io/en/latest/)<br>
 > [wordcloud](https://pypi.org/project/wordcloud/)<br>
-> [pandas](https://pandas.pydata.org/)<br>
+> [pandas](https://pandas.pydata.org/) 需要openpyxl引擎<br>
 > [opencv-python](https://docs.opencv.org/4.x/d6/d00/tutorial_py_root.html)<br>
 > some build-in modules like time, csv, json<br>
 

@@ -10,7 +10,9 @@ import urllib
 from urllib import request,parse
 from bs4 import BeautifulSoup
 import os
-import csv
+import pandas
+import json
+import requests
 
 class Spider:
     def __init__(self):
@@ -28,11 +30,11 @@ class Spider:
         :return:
         '''
 
-        response = urllib.request.Request(url,headers=self.headers)
-        r = urllib.request.urlopen(response)
-        html = r.read().decode("UTF-8")
-        
-        return html
+        # use requests
+        r = requests.get(url, headers=self.headers)
+        r.encoding = "UTF-8"
+
+        return r.text
 
 
     def saveHTML(self,html):
@@ -98,32 +100,36 @@ class Spider:
             items.append([num,topicName,topicUrl,conFinal,author,t_f])
         return items
 
-    def saveData(self, data, name): # 3rd param num
+    def saveData(self, data, name):
         '''
+        2-D array
         '''
-        if not os.path.exists(name):
-            os.mkdir(name)
+        if not os.path.exists('res'):
+            os.mkdir('res')
 
-        filename = os.path.join(name, name + "(less)" + ".csv")
-        fp = open(filename, "a+", encoding="GB18030", newline="")
-        
-        writer = csv.writer(fp, delimiter=",")
-        # headers
-        # writer.writerow(["Reviews", "Title","URL","content","楼主","Time"])
+        df = pandas.DataFrame(data=data,
+                              columns=[
+                                  '评论数', '标题名', 'URL', '大致内容',
+                                  '帖主', '发帖时间'
+                              ])
 
-        for row in data:
-            writer.writerow(row)
-
-        fp.close()
+        df.to_excel(str(os.path.join('res', name + "吧.xlsx")),
+                    columns=[
+                      '评论数', '标题名', 'URL', '大致内容',
+                      '帖主', '发帖时间'
+                    ]
+                    )
 
 
 
 if __name__ == "__main__":
-    # 要爬取的贴吧(自行输入想要爬取的吧名)
-    word = "刀剑神域"
+    # 读取json数据，内含贴吧名和爬取页数
+    jsn = json.load(open('kw.json', 'r', encoding="UTF-8"))
+    # 要爬取的贴吧
+    word = jsn['name']
     kw = word.encode("UTF-8")  # 将关键词转换为Bytes格式，URL不支持中文格式
-    # 贴吧页数（根据贴吧的页数自行改变）
-    page = 20 # 100
+    # 贴吧页数
+    page = int(jsn['page']) # 100
     # 基础网址
     baseurl = "https://tieba.baidu.com/"
     # 将元素保存至item中
@@ -147,12 +153,12 @@ if __name__ == "__main__":
             # 储存帖子信息
             data.extend(tb.getInfo(html,items,year,month,day))
             
-            # 每次爬取完停止1s，防止由于爬取速度过快被限制访问
-            # time.sleep(1)
+            # 每次爬取完停止5s，防止由于爬取速度过快被限制访问
+            time.sleep(5)
         except urllib.error.URLError as e:
             print("{}".format(e))
         finally:
             print("Finish {}".format(i))
     
-        # 将数据储存
-        tb.saveData(data, word)
+    # 将数据储存
+    tb.saveData(data, word)

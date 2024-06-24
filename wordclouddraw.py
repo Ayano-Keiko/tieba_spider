@@ -9,7 +9,7 @@ import cv2 as cv
 
 
 def cut_word(path):
-    file = open(path, "r", encoding='GB18030')
+    file = open(path, "r", encoding='UTF-8')
     txt = file.read()
 
     # 导入自定义字典
@@ -43,25 +43,27 @@ def to_list(items):
 
     items.sort(key=lambda x: x[1],reverse=True)
 
-    # for i in range(20):
-    #     print("{}-->{}".format(items[i][0],items[i][1]))
+    '''
+    for i in range(20):
+        print("{}-->{}".format(items[i][0],items[i][1]))
+    '''
     return items
 
-def save_wordFreq(items):
+def save_wordFreq(items, name):
     data = pandas.DataFrame(data=items,columns=["name","val"])
 
-    data.to_csv("res/freq.csv",encoding="GB18030")
+    data.to_csv(f"res/freq-{name}.csv",encoding="UTF-8")
 
     return data
 
-def draw_pic(txt, mask = ""):
+def draw_pic(txt, name, mask = None):
     '''
     :param txt: 字典或字符串
     :param mask:
     '''
 
     cloud = None
-    if type(mask) == str:
+    if mask is None:
         cloud = wordcloud.WordCloud(width=1960, height=1080,
                                 font_path="res/font.otf",
                                 background_color="#FFFFFF")
@@ -74,15 +76,17 @@ def draw_pic(txt, mask = ""):
 
     if type(txt) is dict:
         cloud.generate_from_frequencies(txt)
-        cloud.to_file("res/tieba-wordcloud_with_mask.png")
+        cloud.to_file(f"res/wordcloud_{name}.png")
     else:
         cloud.generate(txt)
-        cloud.to_file("res/tieba-wordcloud_with_mask.png")
+        cloud.to_file(f"res/wordcloud_{name}.png")
 
 if __name__ == "__main__":
-    fileName = "res/words(less).txt"
+    jsn = json.load(open('kw.json', 'r', encoding='UTF-8'))
+
+    fileName = f"res/{jsn['name']}.txt"
     mask = cv.imread("res/mask.jpg", cv.IMREAD_GRAYSCALE)  # openCV 打开速度更快
-    fp = open(fileName, "r", encoding="GB18030")
+    fp = open(fileName, "r", encoding="UTF-8")
 
     # 进行分词处理
     txt_cut = cut_word(fileName)
@@ -92,7 +96,7 @@ if __name__ == "__main__":
 
     # 将字典格式的词频转换为列表格式，并排序
     list_items = to_list(items)
-    save_wordFreq(list_items)
+    save_wordFreq(list_items, jsn['name'])
 
     # 绘制词云图
-    draw_pic(items, mask=mask)
+    draw_pic(items, jsn['name'], mask=mask)

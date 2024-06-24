@@ -1,18 +1,17 @@
-import csv
+import numpy
+import pandas
+import json
 
 # 自己数据文件所在目录
-directory = "刀剑神域"
+jsn = json.load(open('kw.json', 'r', encoding="UTF-8"))
 # 保存内容至文本文件
-fp = open('res/words(less).txt',mode='w',encoding='GB18030')
+fp = open(f'res/{jsn['name']}.txt', mode='w', encoding='UTF-8')
 
-reader = csv.reader(open("刀剑神域\刀剑神域(less).csv", "r", encoding="GB18030", newline=""))
-index = 1
+data = pandas.read_excel('res' + f"/{jsn['name']}吧.xlsx")
 
-for row in reader:
-    if index > 1:
-        fp.write(row[3])
+for row in data.values:
+    if row[4] is not numpy.nan:
+        fp.write(str(row[4]))
         fp.write('\n')
-
-    index += 1
 
 fp.close()

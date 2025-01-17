@@ -1,7 +1,7 @@
 # tieba_spider
 
 百度贴吧爬虫——获取页面信息<br>
-A way to get specific module of Baidu Tieba.<br>
+![Display Picture](./res/tieba-wordcloud.png)<br>
 
 ## Getting Started
 

@@ -5,24 +5,23 @@
 
 ## Getting Started
 
-1. 运行spider_tieba_gener.py获取网页数据，需要修改文件，详情可查看注释<br>
-    > 修改kw.json内name(贴吧名)和page(爬取页数)
-2. 将所有评论信息保存至一个文本文件，运行wordcut.py<br>
-3. 词云绘制，运行wordclouddraw.py<br>
-    > 分词记得修改userdict.txt，如果没有指定自定义分词字典可全清空并注释' # 导入自定义字典 '这行
+1. Run `spider_tieba_gener.py` to fetch web data. The file needs to be modified; details can be found in the comments.<br>
+    > Modify `kw.json` to update `name` (Tieba name) and `page` (number of pages to crawl).
+2. Save all comment information to a text file and run `wordcut.py`.<br>
+3. For word cloud generation, run `wordclouddraw.py`.<br>
+    > Remember to modify `userdict.txt` for word segmentation. If no custom dictionary is specified, you can clear the file and comment out the line `' # 导入自定义字典 '`.
 
 ## Prerequisites
 
 Python 3.X
 
-> [jieba](https://pypi.org/project/jieba/)<br>
+> [jieba](https://pypi.org/project/jieba/) Chinese word segmentation library<br>
 > [bs4](https://beautiful-soup-4.readthedocs.io/en/latest/)<br>
-> [wordcloud](https://pypi.org/project/wordcloud/)<br>
-> [pandas](https://pandas.pydata.org/) 需要openpyxl引擎<br>
-> [opencv-python](https://docs.opencv.org/4.x/d6/d00/tutorial_py_root.html)<br>
-> some build-in modules like time, csv, json<br>
+> [wordcloud](https://pypi.org/project/wordcloud/) word cloud generation<br>
+> [pandas](https://pandas.pydata.org/) Require openpyxl to read or write xls(x)<br>
+> [openpyxl](https://openpyxl.readthedocs.io/en/stable/)
 
 
 ## Additional Documentation and Acknowledgments
-1. [中文停用词表](https://github.com/goto456/stopwords)<br>
-2. [字体](https://www.100font.com/thread-562.htm)<br>
+1. [Chinese Stop Words](https://github.com/goto456/stopwords)<br>
+2. [Font](https://www.100font.com/thread-562.htm)<br>

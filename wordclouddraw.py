@@ -6,6 +6,7 @@ import jieba
 import wordcloud
 import pandas
 import cv2 as cv
+import json
 
 
 def cut_word(path):
@@ -13,7 +14,7 @@ def cut_word(path):
     txt = file.read()
 
     # 导入自定义字典
-    jieba.load_userdict("userdict.txt")
+    # jieba.load_userdict("userdict.txt")
 
     txt_cut = jieba.lcut(txt)
 
@@ -21,7 +22,7 @@ def cut_word(path):
 
 def fix_data(wordcut):
     data = pandas.read_csv("stopwords/baidu_stopwords.txt", header=None, names=['words'])
-    excludes = list(data['words'].values)
+    excludes = data['words'].values.tolist()
     counts = {}
 
     for item in wordcut:
@@ -43,10 +44,8 @@ def to_list(items):
 
     items.sort(key=lambda x: x[1],reverse=True)
 
-    '''
-    for i in range(20):
-        print("{}-->{}".format(items[i][0],items[i][1]))
-    '''
+    # for i in range(20):
+    #     print("{}-->{}".format(items[i][0],items[i][1]))
     return items
 
 def save_wordFreq(items, name):
@@ -85,7 +84,7 @@ if __name__ == "__main__":
     jsn = json.load(open('kw.json', 'r', encoding='UTF-8'))
 
     fileName = f"res/{jsn['name']}.txt"
-    mask = cv.imread("res/mask.jpg", cv.IMREAD_GRAYSCALE)  # openCV 打开速度更快
+    # mask = cv.imread("res/mask.jpg", cv.IMREAD_GRAYSCALE)  # openCV 打开速度更快
     fp = open(fileName, "r", encoding="UTF-8")
 
     # 进行分词处理
@@ -99,4 +98,4 @@ if __name__ == "__main__":
     save_wordFreq(list_items, jsn['name'])
 
     # 绘制词云图
-    draw_pic(items, jsn['name'], mask=mask)
+    draw_pic(items, jsn['name'])

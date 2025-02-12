@@ -2,6 +2,7 @@
 爬取刀剑神域吧首页
 
 '''
+import random
 import re
 import time
 import urllib.error
@@ -10,6 +11,7 @@ import urllib
 from urllib import request,parse
 from bs4 import BeautifulSoup
 import os
+import csv
 import pandas
 import json
 import requests
@@ -26,9 +28,24 @@ class Spider:
     def getContent(self,url):
         '''
         获取页面源代码
+        ['1.0.1.0', '1.0.8.0', '1.0.32.0',
+        '1.10.9.255', '1.15.255.255', '1.63.255.255',
+        '1.64.123.251', '1.71.255.255', '1.207.255.255',
+        '1.185.255.255', '1.199.255.255', '1.65.216.255',
+        '20.205.243.166', '110.242.68.66', '139.159.241.37',
+        '59.24.3.174', '13.107.21.200', '223.130.192.248']
         :param url:
         :return:
         '''
+
+
+        # proxy_servers = {
+        #
+        # }
+        # response = urllib.request.Request(url,headers=self.headers)
+
+        # r = urllib.request.urlopen(response)
+        # html = r.read().decode("UTF-8")
 
         # use requests
         r = requests.get(url, headers=self.headers)
@@ -125,11 +142,11 @@ class Spider:
 if __name__ == "__main__":
     # 读取json数据，内含贴吧名和爬取页数
     jsn = json.load(open('kw.json', 'r', encoding="UTF-8"))
-    # 要爬取的贴吧
+    # 要爬取的贴吧(自行输入想要爬取的吧名)
     word = jsn['name']
     kw = word.encode("UTF-8")  # 将关键词转换为Bytes格式，URL不支持中文格式
-    # 贴吧页数
-    page = int(jsn['page']) # 100
+    # 贴吧页数（根据贴吧的页数自行改变）
+    page = int(jsn['page'])
     # 基础网址
     baseurl = "https://tieba.baidu.com/"
     # 将元素保存至item中
@@ -145,6 +162,7 @@ if __name__ == "__main__":
     tb = Spider()
 
     for i in range(page + 1):
+
         try:
             # url拼接，由于搜索关键词是中文，所以需要进行处理
             url = baseurl+"f?kw="+parse.quote(kw) + "&ie=utf-8&pn=" + str(i * 50)
@@ -157,8 +175,12 @@ if __name__ == "__main__":
             time.sleep(5)
         except urllib.error.URLError as e:
             print("{}".format(e))
+        except Exception as e:
+            print(f"{e}")
         finally:
-            print("Finish {}".format(i))
+            print("Finish No. {} page".format(i + 1))
+
     
     # 将数据储存
+    # print(data)
     tb.saveData(data, word)
